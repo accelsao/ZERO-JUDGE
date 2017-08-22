@@ -1,0 +1,54 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+
+
+
+
+int p[500001];
+int d[500001][20];//log2(500001)~18 代表範圍[i,i+2^j-1]的max
+int n;
+void st(){
+	//長度0 為自身
+	for (int i = 0; i < n; i++)
+		d[i][0] = p[i];
+
+	for (int j = 1; (1 << j) <= n; j++)
+		for (int i = 0; i + (1 << j) - 1 < n; i++)//i開始 長度(1<<j)也就是2^j 最後一個數字為 i+2^j-1 這個數字要小於n
+			//把它分兩段 這兩段的最大值就是 這段這最大值 i開頭長度2^j-1 i+2^j-1開頭 長度也是2^j-1 (兩段等長)
+			d[i][j] = max(d[i][j - 1], d[i + (1 << (j - 1))][j - 1]);
+}
+int query(int a, int b){
+	int i = 0;
+	//找最長長度*2能覆蓋區間[a,b]  (st建的長度都為2^k k>=0)
+	//ex:區間[3,8] 長度6 找出2^k<=6的最大k (k=2) 也就是長度4 [3,6]3456 和[5,8]5678 
+	while (1 << (i + 1) <= b - a + 1)i++;
+	return max(d[a][i], d[b - (1 << i) + 1][i]);
+}
+int main(){
+	while (cin >> n){
+		for (int i = 0; i < n; i++)
+			cin >> p[i];
+		st();
+		int w, a, b;
+		cin >> w;
+		while (w--){
+			cin >> a >> b;
+			a--, b--;
+			if (a>b)swap(a, b);
+			printf("%d\n", query(a, b));
+		}
+	}
+}

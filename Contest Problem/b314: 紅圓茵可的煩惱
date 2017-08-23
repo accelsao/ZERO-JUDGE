@@ -1,0 +1,91 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+
+
+
+/*
+n-1,0   n-1,m-1
+
+0,0 0,1    0,m-1
+*/
+int we[1001001];
+int pa[1001001];
+int v[1001][1001];
+int n, m, t;
+bool ok;
+const int dir[8][2] = { { 1, 0 }, { 1, 1 }, { 1, -1 }, { -1, 0 }, { -1, 1 }, { -1, -1 }, { 0, 1 }, { 0, -1 } };
+int find(int x){
+	return x == pa[x] ? x : pa[x] = find(pa[x]);
+}
+void joint(int p, int q){
+	p = find(p), q = find(q);
+	if (q == p)return;
+	if (we[p] > we[q])
+		we[p] ++, pa[q] = p;
+	else
+		we[q] ++, pa[p] = q;
+	return;
+}
+
+int main(){
+	int d = 0;
+	while (cin >> n >> m >> t){
+		d++;
+		int a, b;
+		int N = n * m + 10, up = n * m + 1, down = n * m + 2;
+		int p, q, A[8];
+		for (int i = 0; i < N; i++)
+			pa[i] = i, we[i] = 1;
+		for (int i = 0; i < t; i++){
+			cin >> a >> b;
+			p = a*m + b;
+			up = find(up); down = find(down);//up down 上下虛點 若都碰到 代表放下去會無解
+			int s = 0;
+			for (int k = 0; k < 8; k++){//判斷8個方向的點 
+				int tx = a + dir[k][0];
+				int ty = b + dir[k][1];
+				//A[k] 為p 代表可以過 無影響
+				if (ty < 0 || ty >= m){
+					A[k] = p; continue;
+				}
+				//給q值
+				if (tx < 0)//碰上界
+					q = up;
+				else if (tx >= n)////碰下界
+					q = down;
+				else{
+					if (v[tx][ty] != d){//非障礙物
+						A[k] = p; continue;
+					}
+					q = tx*m + ty;
+				}
+				if (find(q) == up)
+					s |= 1;
+				if (find(q) == down)
+					s |= 2;
+				A[k] = q;
+			}
+			if (s != 3){
+				puts("<(_ _)>");
+				for (int k = 0; k < 8; k++)
+						joint(p, A[k]);
+				v[a][b] = d;
+			}
+			else
+				puts(">_<");
+		}
+	}
+}

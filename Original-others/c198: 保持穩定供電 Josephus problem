@@ -1,0 +1,44 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+
+
+int g(int n, int k){
+	if (n == 1)return 0;
+	return (g(n - 1, k) + k) % n;
+}
+int main(){
+	int n, m;
+	int p[501];
+	while (cin >> n >> m, n){
+		//這裡 必從第一個開始 因此人數為n-1 m編號為 (m-1)-1 扣掉第一個人
+		
+		for (int k = 2;; k++){
+			if (g(n-1, k) == m-2){
+				printf("%d\n", k);
+				break;
+			}
+		}
+	}
+}
+/*
+
+f(n) = (f(n-1) + m) mod n
+n=5 m=3
+0 1 2 3 4
+#1:2號死
+3 4 0 1
+*/
+

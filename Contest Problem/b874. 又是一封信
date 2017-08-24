@@ -1,0 +1,42 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+
+int dp[2][10001];
+int main(){
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int n, m;
+	int t;
+	cin >> t;
+	while (t--){
+		cin >> n >> m;
+		for (int i = 0; i <= m; i++)dp[0][i] = dp[1][i] = 0;
+		int k, t = 0;
+		bool ans = 0;
+		while (n--){	
+			cin >> k;
+			if (ans)continue;
+			for (int i = 0; i <= m; i++)dp[t^1][i] = dp[t][i];
+			dp[t][0] = 1;
+			for (int i = 0; i < m; i++)
+				if (dp[t][i])
+					dp[t ^ 1][(i + k) % m] = 1;
+			if (dp[t ^ 1][0])ans = 1;
+			t ^= 1;
+		}
+		puts(ans ? "YES": "NO");
+	}
+}

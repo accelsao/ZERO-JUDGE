@@ -1,0 +1,59 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+
+struct beaver{
+	int h, w, d;
+}p[20001];
+int t;
+bool cmp(beaver a, beaver b){
+	if (a.h == a.h)return a.w < b.w;
+	else
+		return a.h < b.h;
+}
+bool cmpv(beaver a, beaver b){
+	return a.d < b.d;
+}
+int main(){
+	cin >> t;
+	int n, m;
+	while (t--){
+		cin >> n >> m;
+		vector<beaver>v;
+		for (int i = 1; i <= n; i++){
+			cin >> p[i].h >> p[i].w;
+			p[i].d = i;
+		}
+		//v.push_back(beaver{ p[m].h, p[m].w, p[m].d });
+		v.push_back(p[m]);
+		int inh = p[m].h, inw = p[m].w;
+		sort(p + 1, p + n + 1, cmp);
+		
+		for (int i = 1; i <= n; i++){
+			while(v.size()&&v.back().h < p[i].h&&v.back().w < p[i].w){
+				v.pop_back();
+			}
+			if (p[i].h>inh&&p[i].w>inw)
+				v.push_back(p[i]);
+		}
+		sort(v.begin(), v.end(), cmpv);
+			printf("%d\n", v.size());
+			for (int i = 0; i < v.size(); i++){
+				if (i)putchar(' ');
+				printf("%d", v[i].d);
+			}
+			puts("");
+	}
+}

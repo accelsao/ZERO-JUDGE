@@ -1,40 +1,31 @@
-#include<string>
-#include<cstdio>
 #include<iostream>
-#include<queue>
 #include<cmath>
-#include<stack>
-#include<cctype>
-#include<cstring>
-#include<sstream>
-#include<set>
-#include<map>
 #include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
 #include<functional>
-#include <regex>
-#include<cassert>
-#include<deque>
-#include<cstdlib>
-#include<iomanip>
-#include<cstdlib>
-#include<ctime>
+#include<unordered_map>
 using namespace std;
 
 #define  N 1200
 int group[N];
 int d[N];//度數
 int w[N];//計數
-vector<int>p[N];
 int find(int x) {
-	return group[x] == x ? x : find(group[x]);
+	return group[x] == x ? x : group[x]=find(group[x]);
 }
 void joint(int x, int y) {
 	x = find(x); y = find(y);
 	if (x == y)return;
-	if (w[x] > w[y])//w[]計同組人數 把人少改人多的編號
-		w[x]++, group[y] = x;
-	else
-		w[y]++, group[x] = y;
+	w[x]++, w[y]++;
+	group[x] = y;
 	return;
 }
 int main() {
@@ -42,31 +33,35 @@ int main() {
 	int v, e, t;
 	while (cin >> v >> e >> t, v) {
 		for (int i = 1; i <= v; i++)
-			group[i] = i, w[i] = d[i] = 0, p[i].clear();
-		int n = 0, x, y, len;//n 可以看成群 有
+			group[i] = i, w[i] = d[i] = 0;
+		int n = 0, x, y, len;
 		for (int i = 0; i < e; i++) {
 			cin >> x >> y;
 			d[x]++, d[y]++;
 			joint(x, y);
 		}
-		for (int i = 1; i <= v; i++)
-			if (w[i]&&group[i]==i)//獨立 不用連
+		for (int i = 1; i <= v; i++){
+			if (w[i] && group[find(i)] == i)//n為群
 				n++;
+		}
 		int odd[N] = {};
 		int ans = e;
 		ans *= t;
 		ans += n > 0 ? (n - 1) * 100 : 0;//剩下需要連在一起的群
 		for (int i = 1; i <= v; i++)
-			if (d[i] & 1) 
+			if (d[i] & 1)
 				odd[find(i)]++;
 		for (int i = 1; i <= v; i++)
 			if (odd[i] >= 4)//除了起點終點外 >=2 就需要補邊
 				ans += (odd[i] - 2) / 2 * 100;//奇數度n點 除了起終  (n-2)  尚須(n-2)/2條邊走完剩下的點
 		printf("Case %d: %d\n", T++, ans);
-
+		for (int i = 1; i <= v; i++)
+			w[i] = 0;
+		for (int i = 1; i <= v; i++)
+			w[find(i)] ++;
 		int ss = 0;
 		for (int i = 1; i <= v; i++)
-			ss = max(ss, w[i] + 1);
+			ss = max(ss, w[i]);
 		printf("%d\n", ss);
 	}
 }

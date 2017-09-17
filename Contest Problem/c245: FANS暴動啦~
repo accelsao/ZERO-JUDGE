@@ -1,0 +1,75 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cstdlib>
+#include<queue>
+#include<string>
+#include<vector>
+using namespace std;
+
+struct state {
+	int c[4], d;
+	bool operator<(const state &a)const {
+		return d > a.d;
+	}
+};
+int cap[4];
+int vis[101][101][101], ans[101];//總水量不變 vis紀錄前兩個就好
+void solve(int a, int b, int c, int d, int e) {
+	cap[0] = a; cap[1] = b; cap[2] = c; cap[3] = d;
+	memset(vis, 0, sizeof(vis));
+	memset(ans, -1, sizeof(ans));
+	priority_queue<state>q;
+
+	state s;
+	s.d = s.c[0] = s.c[1] = s.c[2] = 0;
+	s.c[3] = d;
+	q.push(s);
+	vis[0][0][0] = 1;
+	while (!q.empty()) {
+		state x = q.top(); q.pop();
+		for (int i = 0; i < 4; i++) {
+			int d = x.c[i];
+			if (ans[d] < 0 || x.d < ans[d])
+				ans[d] = x.d;
+		}
+		if (ans[e] >= 0)break;//find answer
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				if (i != j) {
+					if (!x.c[i] || x.c[j] == cap[j])continue;//i倒入j i==0 or j滿 跳過
+					int num = min(cap[j], x.c[i] + x.c[j]) - x.c[j];//能倒過去的量
+					state next;
+					memcpy(&next, &x, sizeof(x));
+					next.c[i] -= num;
+					next.c[j] += num;
+					next.d = x.d + num;
+					if (!vis[next.c[0]][next.c[1]][next.c[2]]) {
+						vis[next.c[0]][next.c[1]][next.c[2]] = 1;
+						q.push(next);
+					}
+				}
+
+
+	}
+	while (e >= 0) {
+		if (ans[e] >= 0) {
+			printf("%d %d\n", ans[e], e);
+			return;
+		}
+		e--;
+	}
+}
+
+int main() {
+	int t;
+	ios::sync_with_stdio(0); cin.tie(0);
+	cin >> t;
+	int a, b, c, d, e;
+	while (t--) {
+		cin >> a >> b >> c >> d >> e;
+		solve(a, b, c, d, e);
+	}
+}

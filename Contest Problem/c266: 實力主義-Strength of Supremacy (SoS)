@@ -69,7 +69,7 @@ int main() {
 			vector<info>q;//標準差
 			for (int i = 0; i < v.size(); i++) {
 				double x = (v[i].a + v[i].b + v[i].d), y;
-				y = x;
+				y = x;x/=3.0;
 				x = (v[i].a - x)*(v[i].a - x) + (v[i].b - x)*(v[i].b - x) + (v[i].d - x)*(v[i].d - x);
 				info pp = { x, y, i };
 				q.push_back(pp);

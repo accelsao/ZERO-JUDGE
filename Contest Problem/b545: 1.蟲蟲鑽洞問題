@@ -1,0 +1,66 @@
+#include <iostream>
+#include <algorithm>
+#include<stack>
+#include<string>
+#include<cstring>
+using namespace std;
+
+char p[21][21] = {};
+bool v[21][21] = {};
+const int way[4][2] = { { 0, 1 },{ 0, -1 },{ -1, 0 },{ 1, 0 } };
+int n, m;
+bool ans[21][21] = {};
+#define scanf scanf_s
+bool only(int b, int a) {
+	int x, y;
+	int c = 0;
+	for (int i = 0; i < 4; i++) {
+		x = b + way[i][0];
+		y = a + way[i][1];
+		if (x < 1 || y < 1 || x> n || y > m || p[x][y] == '0')continue;
+		if (p[x][y] == '*')c++;
+	}
+	if (c > 1)
+		return 0;
+	return 1;
+}
+void dfs(int y, int x, int dir) {
+	int x1, y1;
+	for (int i = 0; i < 4; i++) {
+		x1 = x + way[i][0];
+		y1 = y + way[i][1];
+		if (x1 < 1 || y1 < 1 || x1 > m || y1 > n || p[y1][x1] == '0')continue;
+		if (v[y1][x1])continue;
+		v[y1][x1] = 1;
+		//ax = x, ay = y;
+		if (i != dir) {
+			if (!ans[x][y])
+				printf("%d %d\n", x, y);
+			ans[x][y] = 1;
+			return dfs(y1, x1, i);
+		}
+		return  dfs(y1, x1, dir);
+	}
+	cout << x << ' ' << y << endl;
+	return;
+}
+int main() {
+	while (~scanf("%d%d", &m, &n)) {
+		memset(ans, 0, sizeof(ans));
+		for (int i = 1; i <= n; i++)
+			for (int j = 1; j <= m; j++) {
+				cin >> p[i][j];
+				v[i][j] = 0;
+			}
+		bool over = 0;
+		for (int i = 1; i <= m && !over; i++) {
+			for (int j = 1; j <= n && !over; j++)
+				if (p[j][i] == '*'&&only(j,i)) {
+					v[j][i] = 1;
+					//printf("%d %d\n", i, j);
+					dfs(j, i, -1);
+					over = 1;
+				}
+		}
+	}
+}

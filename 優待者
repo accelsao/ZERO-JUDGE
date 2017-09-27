@@ -1,0 +1,111 @@
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<iostream>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<functional>
+#include<unordered_map>
+using namespace std;
+
+int t[20001];//排序過程暫存
+int s[20001];//排序用
+int p[20001];
+int n, k;
+int merge_s(int l, int r, int q) {
+	if (l >= r)return 0;
+	int cnt = 0;
+	int m = (l + r) / 2;
+	cnt += merge_s(l, m, q);
+	cnt += merge_s(m + 1, r, q);
+
+	int p = m + 1;
+	for (int i = l; i <= m; i++) {
+		while (p <= r&&s[p] - s[i] <= q)p++;
+		cnt += r - p + 1;//剩下都s[p]-s[i]>q 符合都列入計算
+	}
+	//merge
+	int x = l, i = l, j = m + 1;
+	while (i <= m&&j <= r) {
+		if (s[i] < s[j])t[x++] = s[i++];
+		else t[x++] = s[j++];
+	}
+	while (i <= m)t[x++] = s[i++];
+	while (j <= r)t[x++] = s[j++];
+	for (int i = l; i <= r; i++)
+		s[i] = t[i];
+	//memcpy(s + l, t + l, sizeof(int)*(r - l + 1));
+	//memcpy(s + l, t + l, sizeof(r - l + 1));
+	return cnt;
+}
+bool check(int q) {
+	//區間和>q 個數是否大於k-1
+	//因p不單調 用merge_sort處理 使之單調
+	for (int i = 0; i <= n; i++)
+		s[i] = p[i];
+	//memcpy(s, p, sizeof(p));
+	int cnt = merge_s(0, n, q);
+	return cnt > k - 1;
+}
+int cnum(string s) {
+	int a = 0;
+	if (s[0]>'Z')
+		for (int i = 0; i < s.size(); i++) {
+			a *= 4;
+			a += s[i] - 'a' + 1;
+		}
+	else
+		for (int i = 0; i < s.size(); i++) {
+			a *= 4;
+			a += s[i] - 'A' + 1;
+		}
+	return a;
+}
+string numc(int a) {
+	string s = "";
+	if (!a)return s;
+	else if (a > 0) {
+		while (a) {
+			s += (a - 1) % 4 + 'a';
+			a = (a - 1) / 4;
+		}
+		reverse(s.begin(), s.end());
+		return s;
+	}
+	a = -a;
+	while (a) {
+		s += (a - 1) % 4 + 'A';
+		a = (a - 1) / 4;
+	}
+	reverse(s.begin(), s.end());
+	return s;
+}
+int main() {
+	while (cin >> n, n) {
+		for (int d = 0; d < 12; d++) {
+			string s;
+			p[0] = 0;
+			for (int i = 1; i <= n; i++) {
+				cin >> s;
+				p[i] = cnum(s);
+				p[i] += p[i - 1];
+			}
+			cin >> k;
+			int l = n*(-16385) - 1;
+			int r = n * 16385 + 1;
+			while (r - l > 1) {
+				int m = (l + r) / 2;
+				if (check(m))l = m;
+				else r = m;
+			}
+			string b = numc(r);
+			cout << b << endl;
+		}		
+	}
+}

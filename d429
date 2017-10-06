@@ -1,0 +1,65 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<functional>
+#include<unordered_map>
+using namespace std;
+
+
+int p[30][30], used[30], back[30], joint[30], chose[30];
+int n, f, Ans;
+#define scanf scanf_s
+int DFS(int now, int last, int depth) {
+	int a, back_depth = depth - 1, t;
+	back[now] = depth, f++;
+	for (a = 1; a <= n; a++) 
+		if (p[now][a]) 
+			if (used[a]) 
+				back_depth = min(back_depth, back[a]);
+			else {
+				used[a] = 1;
+				t = DFS(a, now, depth + 1);
+				back_depth = min(back_depth, t);
+			}
+	if (back_depth == depth - 1) {
+		for (a = 1; a <= n; a++)
+			if (p[now][a] && joint[a] && chose[a])
+				break;
+		if (a == n + 1) {
+			Ans++;
+			chose[now] = 1; 
+		}
+		joint[now] = 1;
+	}
+	return back_depth;
+}
+int main() {
+	int x, y;
+	while (scanf("%d", &n) == 1) {
+		memset(p, 0, sizeof(p));
+		memset(used, 0, sizeof(used));
+		memset(chose, 0, sizeof(chose));
+		memset(joint, 0, sizeof(joint));
+		while (scanf("%d", &x) == 1 && x) {
+			scanf("%d", &y);
+			p[x][y] = 1, p[y][x] = 1;
+		}
+		Ans = 0, f = 0, used[1] = 1, DFS(1, 0, 0);
+		chose[2];
+		printf("%d\n", Ans + (n - f));
+	}
+}
+
+
+///*
+
+//*/

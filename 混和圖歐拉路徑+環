@@ -30,11 +30,12 @@ int v[103], a[103];
 int p[103], con[103];//群,連接
 int n, m;
 int s, t;
+int sx, sy;
 int bfs(){
 	queue<int>q;
-	q.push(0);
+	q.push(s);
 	for (int i = 0; i <= t; i++)a[i] = -1;
-	a[0] = 0;
+	a[s] = 0;
 	while (!q.empty()){
 		int u = q.front(); q.pop();
 		for (int i = 0; i < g[u].size(); i++){
@@ -104,14 +105,21 @@ int main(){
 			p[find(x)] = find(y);
 		}
 		int flag = 0, flow = 0, gp = 0;
-		int cod, sx=0, sy=0;
+		int cod;
+		sx = sy = 0;
 		cod = 0;
 		for (int i = 1; i <= n; i++){
 			if (d[i] & 1){
 				flag = 1;
 				cod++;
-				if (d[i] == 1)if (!sx)sx = i; else sy = i;
-				else if (d[i] == -1)if (!sy)sy = i; else sx = i;
+				if (d[i] == 1)
+					if (g[i].size())
+						sx = i;
+					else sy = i;
+				if (d[i] == -1)
+					if (g[i].size())
+						sy = i;
+					else sx = i;
 			}
 			//出 s->x 入 x->t
 			if (d[i] > 0){
@@ -132,6 +140,7 @@ int main(){
 
 		if (flag&&cod == 2){
 			int sa=0, sb=0;
+			
 			d[sx]++, d[sy]--;
 			if (d[sx] > 0)sa = 1;
 			if (d[sy] < 0)sb = 1;
@@ -155,14 +164,14 @@ int main(){
 			if(sb==1){
 				g[sy].push_back(edge{ t, -d[sy] / 2, g[t].size(), 1 });
 				g[t].push_back(edge{ sy, 0, g[sy].size() - 1, 0 });
-				flow += abs(d[sy]) / 2;
+				//flow += abs(d[sy]) / 2;
 			}
-			E[sy].push_back(eg{ sx, 0 });
-			int s = mf();
-			if (s != flow)
+			//E[sx].push_back(eg{ sy, 0 });
+			int ss = mf();
+			if (ss != flow)
 				puts("No path");
 			else{
-				E[sy].pop_back();
+				//E[sx].pop_back();
 				for (int i = 1; i <= n; i++)
 					for (int j = 0; j < g[i].size(); j++){
 						edge &e = g[i][j];
@@ -170,16 +179,19 @@ int main(){
 							if (e.cap>0)E[i].push_back(eg{ e.to, 0 });
 							else E[e.to].push_back(eg{ i, 0 });
 					}
-				euler(sx);
-				while (!stk.empty()){
-					printf("%d ", stk.top());
-					stk.pop();
+				euler(1);
+				if (stk.size() < m)puts("NO");
+				else{
+					while (!stk.empty()){
+						printf("%d ", stk.top());
+						stk.pop();
+					}
+					printf("%d\n", sx);
 				}
-				printf("%d\n", sy);
 			}
 			continue;
 		}
-		else{
+		else if(flag){
 			puts("No path");
 			continue;
 		}
@@ -203,3 +215,13 @@ int main(){
 		puts("1");
 	}
 }
+
+/*
+n m
+1~n點
+m條邊必須走
+D單向 U雙向
+求歐拉環
+沒有環or沒有每個邊走到 無解
+
+*/

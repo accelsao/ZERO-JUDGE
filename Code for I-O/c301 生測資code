@@ -14,17 +14,17 @@ struct state {
 	long long d, step;
 	state* pre;
 	void init() {
-		d = 1e11, step = 0, pre = 0;
+		d = 9e18, step = 0, pre = 0;
 	}
 };
 char m[25][25];
 string dstr[8] = { "E", "ES", "S", "WS", "W", "WN", "N", "EN" };
 long long p[25][2];//pick carry
-int r, c, walk, t, G;
+int r, c, t;
 int sx, sy, ex, ey;
 state dis[20][20][1 << 11];
 int v[20][20][1 << 11];
-long long w[1 << 11];
+long long w[1 << 11], walk, G;
 const int dw[8][2] = { { 0, 1 },{ 1, 1 },{ 1, 0 },{ 1, -1 },{ 0, -1 },{ -1, -1 },{ -1, 0 },{ -1, 1 } };
 void spfa() {
 	for (int i = 0; i < r; i++)
@@ -33,7 +33,7 @@ void spfa() {
 				dis[i][j][k].init(), v[i][j][k] = 0;
 	w[0] = 0;
 	for (int i = 1; i < (1 << t); i++) {
-		int sum = 0, k = i, j = 0;
+		long long sum = 0, k = i, j = 0;
 		while (k) {
 			if (k & 1)
 				sum += p[j][1];
@@ -53,7 +53,7 @@ void spfa() {
 		for (int k = 0; k < 8; k++) {
 			tx = sx + dw[k][0]; ty = sy + dw[k][1]; ts = ss;
 			if (tx < 0 || ty < 0 || tx >= r || ty >= c || m[tx][ty] == '#')continue;
-			int rg = 0;
+			long long rg = 0;
 			if (m[tx][ty] == '@')rg = walk;
 			else if (m[tx][ty] == '.')rg = w[ss] + walk;
 			if (dis[tx][ty][ts].d > dis[sx][sy][ss].d + rg) {
@@ -81,13 +81,12 @@ void spfa() {
 	}
 	//in
 	/*
-	if (dis[ex][ey][(1 << t) - 1].d == 1e11)
-		G = rand() % 2147483647 + 1;
+	if (dis[ex][ey][(1 << t) - 1].d == 9e18)
+		G = 9487;
 	else {
-		G = dis[ex][ey][(1 << t) - 1].d + rand() % 21 - 10;
+		G = dis[ex][ey][(1 << t) - 1].d + rand() % 4 - 1;
 	}
-	m[1][1];
-	printf("%d\n", G);
+	printf("%lld\n", G);
 	for (int i = 0; i < r; i++) {
 		for (int j = 0; j < c; j++) {
 			if ('0' <= m[i][j]&&m[i][j] <= '9')
@@ -96,17 +95,18 @@ void spfa() {
 		}
 		cout << endl;
 	}
-	printf("%d\n", walk);
+	printf("%lld\n", walk);
 	for (int i = 0; i < t; i++) {
 		if (i)putchar(' ');
-		printf("%lld %lld", p[i][0], p[i][1]);
+		printf("%d %d", p[i][0], p[i][1]);
 	}
 	puts("");
 	*/
-	if (dis[ex][ey][(1 << t) - 1].d == 1e9)
+	///*
+	if (dis[ex][ey][(1 << t) - 1].d == 9e18)
 		puts("Dead");
 	else {
-		printf("Time required %d\n", dis[ex][ey][(1 << t) - 1].d);
+		printf("Time required %lld\n", dis[ex][ey][(1 << t) - 1].d);
 		if (dis[ex][ey][(1 << t) - 1].d <= G)puts("Save");
 		else puts("Not even close");
 		state *p = &dis[ex][ey][(1 << t) - 1];
@@ -122,27 +122,31 @@ void spfa() {
 		}
 		puts(ans.c_str());
 	}
+	//*/
 }
 char d[7] = { 'S','T','.','#','O','@','*' };
 int main() {
 	FILE *s;
 	/*
-	freopen_s(&s, "c301_00.in.txt", "w", stdout);
-	
-	int tt = 10;
+	freopen_s(&s, "c301_02.in.txt", "w", stdout);
+	int tt = 3;
 	while (tt--) {
-		srand(tt);
-		r = rand() * 23 % 20 + 1;
-		c = rand() * 133 % 20 + 1;
+		srand(tt+132);
+		r = 20;
+		c = 20;
 		printf("%d %d\n", r, c);
-		int tr = rand() * 23 % 10 + 1;
+		int tr = 10;
 		t = 0;
 		char R[410] = {};
 		for (int i = 0; i < r*c; i++)R[i] = '!';
 		int Run = r*c, top = 2 + tr;
 		for (int ii = 0; ii < Run;ii++) {
-			int s = rand()*42 % r*c;
-			while (R[s] != '!')s++, s = s >= r*c ? 0 : s;
+			int s = rand()*777 % r*c;
+			while (R[s] != '!') {
+				long long S = rand()*17 % 10 + 1;
+				s += S < 1 ? 1 : S; S--;
+				s = s >= r*c ? 0 : s;
+			}
 			if (ii < top) {
 				R[s] = !ii ? 'S' : ii == 1 ? 'T' : '*';
 				int i = s / c, j = s%c;
@@ -154,23 +158,23 @@ int main() {
 					m[i][j] = '0' + t++;
 			}
 			else {
-				R[s] = d[rand() * 345 % 4 + 2];
+				R[s] = d[rand() *111 % 4 + 2];
 				int i = s / c, j = s%c;
 				m[i][j] = R[s];
 			}
 		}
-		walk = rand() * 32 % 2147483647 + 1;
+		walk = 1147483647;
 		//pair<int, int>poi[10];
 		for (int i = 0; i < t; i++) {
-			p[i][0] = rand()*34 % 2147483647 + 1;
-			p[i][1] = rand()*53 % 2147483647 + 1;
+			p[i][0] = rand() * 21 % 122 + 30;
+			p[i][1] = rand() * 33 % 832 + 1;
 		}
 		spfa();
 	}
 	puts("0 0");
-
-	*/
-	freopen_s(&s, "c301_00.outn.txt", "w", stdout);
+   */
+	///*
+	freopen_s(&s, "c301_02.out.txt", "w", stdout);
 	while (cin >> r >> c, r + c) {
 		cin >> G;
 		t = 0;
@@ -190,4 +194,6 @@ int main() {
 			}
 		spfa();
 	}
+	//*/
 }
+

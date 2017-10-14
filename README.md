@@ -7,8 +7,6 @@ zero judge online problem solution
 
 ---------------------------
 出題計畫:
-
-哈密爾頓問題
 LCA
 單調隊列 RMQ
 MATCH
@@ -23,6 +21,7 @@ dlx
 BIT
 edmondd 朱劉 
 有向最小生成樹
+二次剩餘
 -------------------------
 目前主要:RE0
 次要:美好世界

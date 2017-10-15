@@ -1,7 +1,7 @@
 # ZERO-JUDGE
-zero judge online problem solution
+Zero judge online problem solution
 
-這裡甚麼題目都會放
+這裡甚麼題目都可能放
 ---------------------------
 出題計畫:
 LCA
@@ -42,5 +42,7 @@ Knight's Tour
 
 -------------------------
 目前主要:RE0
+
 次要:美好世界
+
 3:Overlord

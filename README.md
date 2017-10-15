@@ -4,8 +4,10 @@ zero judge online problem solution
 這裡甚麼題目都會放
 ---------------------------
 出題計畫:
-LCA\n
-單調隊列 RMQ\n
+LCA
+
+單調隊列 RMQ
+
 MATCH
 SPFA
 線段樹

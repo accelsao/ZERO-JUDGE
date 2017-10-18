@@ -8,6 +8,8 @@ Zero judge online problem solution
 DP-插頭DP -http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html#1
 -11270
 
+dp優化 http://pisces.ck.tp.edu.tw/~peng/index.php?action=showfile&file=fe8e302bf69142773c541b1133e43c7413a560a38
+
 樹-線段樹
 
 單調隊列 

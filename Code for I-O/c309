@@ -18,26 +18,23 @@ using namespace std;
 
 int N;
 map<string, int>m;
-string lngg[100];
 int R(string s){
-	if (!m[s]){
+	if (!m[s])
 		m[s] = m.size();
-		lngg[m[s]] = s;
-	}
 	return m[s];
 }
 struct state{
 	string name, lng, race;
 	set<string>g;
 	int n;
-	int lng_m[100];
+	int lng_m[15];
 	void read(){
 		string s;
 		getline(cin, s);
 		g.clear();
 		stringstream ss(s);
 		ss >> name >> race >> n;
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 15; i++)
 			lng_m[i] = 0;
 		for (int i = 0; i < n; i++){
 			ss >> lng;
@@ -48,23 +45,23 @@ struct state{
 			g.insert(s);
 	}
 	int iscom(string a){
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 15; i++)
 			if (lng_m[i] == lng_m[m[a]])
 				return 1;
 		return 0;
 	}
 	int com(state a){
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 15; i++)
 			if (lng_m[i] && a.lng_m[i])
 				return i;
 	}
 
-}C[15];
+}C[16];
 struct P{
 	int d, p;
 };
-int g[15][15];
-P dp[1 << 15][15];
+int g[16][16];
+P dp[1 << 16][16];
 bool tsp(int s, int p){
 	if (dp[s][p].d != -1)return dp[s][p].d;
 	int &ans = dp[s][p].d;
@@ -79,60 +76,61 @@ bool tsp(int s, int p){
 	return 0;
 }
 int main(){
+	//ios::sync_with_stdio(0); cin.tie(0);
+	FILE* s;
+	
 	string name[15] = { "Momonga", "Albedo", "Shalltear_Bloodfallen", "Gargantua", "Cocytus", "Aura_Bella_Fiora", "Mare_Bello_Fiore", "Demiurge",
 		"Victim", "Sebas_Tian", "Yuri_Alpha", "Lupusregina_Beta", "Narberal_Gamma", "CZ2128_Delta", "Solution_Epsilon" };
 	string race[9] = { "Undead", "Evil", "Vampire", "Insect_Warrior", "Human", "Angel", "Zombie", "Werewolf", "Phantom" };
-	ios::sync_with_stdio(0), cin.tie(0);
-	FILE *s;
-	freopen_s(&s, "c309_00.in.txt", "w", stdout);
+
 	
-	int T = 5;
+	/*freopen_s(&s, "c309_04.in.txt", "w", stdout);
+
+	int T = 300;
 	while (T--){
 		vector<pair<string, string>>nmr;
-		srand(T + 152);
-		N = rand() % 13 + 3;
+		srand(T + 963);
+		N = 15;
 		printf("%d\n", N);
-		int c = rand() * 3 % 15;
+		int c = rand() % 15;
 		for (int i = c; i < c + N; i++)
-			nmr.push_back({ name[i % 15], race[rand() * 7 % 9] });
+			nmr.push_back({ name[i % 15], race[rand() * 67 % 9] });
 		for (int k = 0; k < N; k++){
 			cout << nmr[k].first << ' ' << nmr[k].second << ' ';
-			int n = rand() % 5 + 1;
+			int n = 5;
 			cout << n << ' ';
 			bool cnt[15] = {};
 			cout << nmr[(k - 1 + N) % N].second << ' ';
-			for (int i = 1; i < n; i++){
-				int c = rand() * 13 % 9;
-				if (cnt[c] || race[c] == nmr[(k - 1 + N) % N].second)c++, c = c > 8 ? 0 : c;
+			if (nmr[(k - 1 + N) % N].second == nmr[(k + 1) % N].second)
+				cout << race[rand() * 313 % 9] << ' ';
+			else
+				cout << nmr[(k + 1) % N].second << ' ';
+			for (int i = 2; i < n; i++){
+				int c = rand() * 31 % 9;
+				while (cnt[c] || race[c] == nmr[(k - 1 + N) % N].second || race[c] == nmr[(k + 1) % N].second)c++, c = c > 8 ? 0 : c;
 				cout << race[c] << ' ';
 				cnt[c] = 1;
 			}
 			//輸出友好國家
-			n = rand() * 19 % (N - 1);
+			n = N - 1;
+			cout << nmr[(k + 1) % nmr.size()].first << ' ';
+			cout << nmr[(k - 1 + nmr.size()) % nmr.size()].first << ' ';
 			for (int i = 0; i < 15; i++)
 				cnt[i] = 0;
-			for (int i = 0; i < n; i++){
-				int c = rand() * 13 % nmr.size();
-				if (cnt[c] || c != k)c++, c = c > nmr.size() ? 0 : c;
+			for (int i = 2; i < n; i++){
+				int c = rand() * 23 % nmr.size();
+				while (cnt[c] || nmr[c].first == nmr[(k + 1) % nmr.size()].first || nmr[c].first == nmr[(k - 1 + nmr.size()) % nmr.size()].first)c++, c = c >= nmr.size() ? 0 : c;
 				if (i)cout << ' ';
 				cout << nmr[c].first;
 				cnt[c] = 1;
 			}
 			puts("");
 		}
-
 	}
-
+	puts("0");
+	*/
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	freopen_s(&s, "c309_04.out.txt", "w", stdout);
 	while (cin >> N, N){
 		getchar();
 		m.clear();
@@ -140,9 +138,9 @@ int main(){
 			C[i].read();
 		memset(g, 0, sizeof(g));
 		for (int i = 0; i < N; i++)
-			for (int j = 0; j < N; j++)
+			for (int j = i + 1; j < N; j++)
 				if (C[i].g.count(C[j].name) && C[j].g.count(C[i].name) && C[i].iscom(C[j].race) && C[j].iscom(C[i].race))
-					g[i][j] = 1;
+					g[i][j] = g[j][i] = 1;
 		for (int i = 0; i < (1 << N); i++)
 			for (int j = 0; j < N; j++)
 				dp[i][j].d = -1;
@@ -156,13 +154,13 @@ int main(){
 				p ^= (1 << q);
 			}
 			for (int i = 0; i < N; i++){
-				printf("%d ", i + 1);
-				cout << C[s[(i - 1 + 10) % 10]].race << " ";
+				cout << i + 1 << ' ';
+				cout << C[s[(i - 1 + N) % N]].race << " ";
 				cout << C[s[i]].name << " ";
-				cout << C[s[(i + 1 + 10) % 10]].race << endl;
+				cout << C[s[(i + 1 + N) % N]].race << '\n';
 			}
 		}
 		else
-			puts("IMPOSSIBLE!!!");
+			cout << "IMPOSSIBLE!!!\n";
 	}
 }

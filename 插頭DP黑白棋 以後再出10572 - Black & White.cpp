@@ -129,3 +129,72 @@ int main() {
 			}
 	}
 }
+/*
+r,c最多8
+ma mb 最多3
+代表 可連通的分量
+ma 白
+mb 黑
+輸出可能數量
+輸出任一種可能
+ox 不能出現2X2
+然後要塗滿
+--
+5
+2 3
+1 1
+o..
+.##
+5 5
+2 1
+..#..
+o....
+o...o
+o....
+.#...
+4 5
+3 3
+.....
+..o..
+#....
+.....
+2 3
+1 1
+###
+oo#
+6 8
+1 1
+........
+........
+........
+........
+.#......
+........
+------
+4
+ooo
+oxx
+263
+ooxoo
+oxxxo
+oooxo
+oxoxo
+oxxxo
+1130
+ooooo
+oxoxo
+xxoxo
+ooooo
+1
+xxx
+oox
+71582
+oooooooo
+oxoxoxox
+oxoxoxox
+oxoxoxox
+oxoxoxox
+oxxxxxxx
+---
+10572
+*/

@@ -17,14 +17,14 @@
 using namespace std;
 
 
-const int M = 20001;
+const int M = 10001;
 long long cost[M], d[M];
 int p[M][3];//輸入點
 long long dp[M];
 int g[M][M];//實際距離
 int r[M][M];//障礙物
 int tx, ty;
-const int dw[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
+const int dw[4][2] = { { 0,1 },{ 1,0 },{ 0,-1 },{ -1,0 } };
 int H(int sx, int sy) {
 	return abs(sx - tx) + abs(sy - ty);
 }
@@ -54,7 +54,7 @@ int astar(int sx, int sy) {
 		v[cur.x][cur.y] = 1;
 		for (int k = 0; k < 4; k++) {
 			int nx = cur.x + dw[k][0], ny = cur.y + dw[k][1];
-			if (nx < 0 || nx >= n || ny < 0 || ny >= m || !r[nx][ny]||v[nx][ny])
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m || !r[nx][ny] || v[nx][ny])
 				continue;
 			int ng = g[cur.x][cur.y] + 1;
 			if (ng >= g[nx][ny]) //this isnt a better path
@@ -75,41 +75,41 @@ int main() {
 	int T = 3;
 	printf("%d\n", T);
 	while (T--) {
-		srand(T + 235);
-		int C = rand()*13 % 100000 + 1;
-		printf("%d\n", C);
-		int r, c, x, y;
-		r = rand()*19 % 19998 + 3;
-		c = rand()*29 % 19998 + 3;
-		for (int i = 0; i < r; i++)
-			for (int j = 0; j < c; j++)
-				rp[i][j] = 0;
-		x = rand() * 59 % r;
-		y = rand() * 97 % c;
-		rp[x][y] = 1;
-		printf("%d %d\n%d %d\n", x, y, r, c);
-		int m = min(rand() * 113 % (r*c - 1) + 1, 5000), n = min(rand() * 129 % (r*c - m - 1), 5000);
-		printf("%d\n", n);
-		for (int i = 0; i < n; i++) {
-			x = rand() * 13 % r;
-			y = rand() * 71 % c;
-			while (rp[x][y]) { y++; if (y == c)x++, y = 0; if (x == r)x = 0; }
-			rp[x][y] = 1;
-			printf("%d %d\n", x, y);
-		}
-		printf("%d\n", m);
-		for (int i = 0; i < m; i++) {
-			x = rand() * 37 % r;
-			y = rand() * 197 % c;
-			int w = rand() * 337 % 1000 + 1;
-			while (rp[x][y]) { y++; if (y == c)x++, y = 0; if (x == r)x = 0; }
-			rp[x][y] = 1;
-			printf("%d %d %d\n", x, y,w);
-		}
+	srand(T + 235);
+	int C = rand()*13 % 100000 + 1;
+	printf("%d\n", C);
+	int r, c, x, y;
+	r = rand()*19 % 9998 + 3;
+	c = rand()*29 % 9998 + 3;
+	for (int i = 0; i < r; i++)
+	for (int j = 0; j < c; j++)
+	rp[i][j] = 0;
+	x = rand() * 59 % r;
+	y = rand() * 97 % c;
+	rp[x][y] = 1;
+	printf("%d %d\n%d %d\n", x, y, r, c);
+	int m = min(rand() * 113 % 10, r*c - 1), n = min(rand() * 129 % 15, r*c - m - 1);
+	printf("%d\n", n);
+	for (int i = 0; i < n; i++) {
+	x = rand() * 13 % r;
+	y = rand() * 71 % c;
+	while (rp[x][y]) { y++; if (y == c)x++, y = 0; if (x == r)x = 0; }
+	rp[x][y] = 1;
+	printf("%d %d\n", x, y);
+	}
+	printf("%d\n", m);
+	for (int i = 0; i < m; i++) {
+	x = rand() * 37 % r;
+	y = rand() * 197 % c;
+	int w = rand() * 337 % 1000 + 1;
+	while (rp[x][y]) { y++; if (y == c)x++, y = 0; if (x == r)x = 0; }
+	rp[x][y] = 1;
+	printf("%d %d %d\n", x, y,w);
+	}
 	}
 	*/
 	///*
-	//freopen_s(&f, "c340_00.out.txt", "w", stdout);
+	freopen_s(&f, "c340_00.out.txt", "w", stdout);
 	int t, x, y;
 	cin >> t;
 	while (t--) {
@@ -119,7 +119,7 @@ int main() {
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < m; j++)
 				r[i][j] = 1;
-		int a, b,s;
+		int a, b, s;
 		cin >> s;
 		for (int i = 0; i < s; i++) {
 			cin >> a >> b; r[a][b] = 0;//0為障礙物
@@ -150,7 +150,7 @@ int main() {
 			q.push_back(i);
 			while (!q.empty() && p[i][2] - p[q.front() - 1][2] > c)
 				q.pop_front();
-			dp[i] = df(q.front())+ cost[i] + d[i];
+			dp[i] = df(q.front()) + cost[i] + d[i];
 		}
 		printf("%lld\n", dp[s]);
 	}

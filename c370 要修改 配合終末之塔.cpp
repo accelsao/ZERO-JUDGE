@@ -12,7 +12,7 @@ const int maxn = 100010, maxm = 300010, maxk = 22;
 const int INF = 1e9 + 7;
 #define LL long long
 int n, m, delta, idc;
-int head[maxn], acc[maxn][maxk], dep[maxn], p[maxn], fst[maxn][maxk], snd[maxn][maxk];
+int head[maxn], acc[maxn][maxk], dep[maxn], p[maxn], fst[maxn][maxk];
 LL ans;
 bool in[maxm];
 
@@ -22,8 +22,8 @@ struct Edge {
 
 struct Edge1 {
 	int to, next, w;
-};
-vector<Edge1>ed1[maxm];
+}ed1[maxm];
+
 bool cmp(Edge a, Edge b) {
 	return a.v < b.v;
 }
@@ -35,15 +35,12 @@ void init() {
 		in[i] = head[i] = 0;
 	memset(acc, 0, sizeof(acc));
 	memset(fst, 0, sizeof(fst));
-	memset(snd, 0, sizeof(snd));
 }
 void adde(int u, int v, int w) {//记录x->y的路径 
-	//ed1[++idc].to = v;
-	//ed1[idc].next = head[u];
-	//head[u] = idc;
-	//ed1[idc].w = w;
-	ed1[u].push_back(Edge1{ v,w });
-	ed1[v].push_back(Edge1{ u,w });
+	ed1[++idc].to = v;
+	ed1[idc].next = head[u];
+	head[u] = idc;
+	ed1[idc].w = w;
 }
 
 int find(int x) {//并查集 
@@ -55,15 +52,13 @@ void dfs(int u) {//初始化st表
 		acc[u][i] = acc[acc[u][i - 1]][i - 1];//维护到达位置 
 		int no1 = fst[u][i - 1], no2 = fst[acc[u][i - 1]][i - 1];
 		fst[u][i] = max(no1, no2);//維護最長邊
-		snd[u][i] = max(snd[u][i - 1], snd[acc[u][i - 1]][i - 1]);
-		if (no1 != no2) snd[u][i] = max(snd[u][i], min(no1, no2));//維護次長邊
 	}
-	for (Edge1 k:ed1[u]) {
-		int v = k.to;
-		if (!dep[v]) {
+	for (int k = head[u]; k; k = ed1[k].next) {
+		int v = ed1[k].to;
+		if (v != acc[u][0]) {
 			dep[v] = dep[u] + 1;
 			acc[v][0] = u;
-			fst[v][0] = k.w;
+			fst[v][0] = ed1[k].w;
 			dfs(v);
 		}
 	}
@@ -80,7 +75,7 @@ void kruskal() {
 		p[find(u)] = find(v);
 		in[i] = 1;//记录它是否在最小生成树中 
 		adde(u, v, w);
-		//adde(v, u, w);//构造最小生成树，保存两点间路径 
+		adde(v, u, w);//构造最小生成树，保存两点间路径 
 		ans += w;
 		if (cnt == n - 1) break;//完成 
 	}
@@ -101,17 +96,16 @@ int lca(int u, int v) {//倍增求lca
 }
 
 void query(int u, int lc, int w) {
-	int max1 = 0, max2 = 0;
+	int max1 = 0;
 	for (int i = 20, h = dep[u] - dep[lc]; i >= 0; i--)
 		if (h & (1 << i)) {
 			if (fst[u][i] > max1) {
-				max2 = max1;
+			
 				max1 = fst[u][i];
 			}
-			max2 = max(max2, snd[u][i]);
 			h -= (1 << i);
 		}
-	delta = min(delta, min(w - max1, w - max2));
+	delta = min(delta, w - max1);
 }
 
 void solve(int x) {

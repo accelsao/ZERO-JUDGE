@@ -7,8 +7,6 @@
 #include<string>
 #include<queue>
 using namespace std;
-
-
 const int maxn = 100010, maxm = 300010, maxk = 21;
 const int INF = 1e9 + 7;
 #define LL long long
@@ -43,21 +41,20 @@ int find(int x) {//并查集
 }
 void st() {
 	for (int i = 1; i <= N; i++)
-		for (int j = 1; j <= n;j++) 
+		for (int j = 1; j <= n; j++)
 			if (~f[j][i - 1]) {
 				f[j][i] = f[f[j][i - 1]][i - 1];//维护到达位置 
 				me[j][i] = max(me[j][i - 1], me[f[j][i - 1]][i - 1]);
 			}
 }
 void dfs(int u) {//初始化st表 
-	for (Edge1 k:ed1[u]) {
+	for (Edge1 k : ed1[u]) {
 		int v = k.to;
-		if (v == f[u][0])continue;		
+		if (v == f[u][0])continue;
 		dep[v] = dep[u] + 1;
 		f[v][0] = u;
 		me[v][0] = k.w;
 		dfs(v);
-		
 	}
 }
 
@@ -86,10 +83,10 @@ int lca(int u, int v) {//倍增求lca
 			u = f[u][d];
 		}
 		d++, h >>= 1;
-	}	
+	}
 	if (u == v) return t;
 	for (h = 1; (1 << h) <= dep[u]; h++);
-	while (--h >= 0) 
+	while (--h >= 0)
 		if (f[u][h] != f[v][h]) {
 			t = max(t, max(me[u][h], me[v][h]));
 			u = f[u][h];
@@ -114,7 +111,7 @@ int main() {
 		st();
 		for (int i = 1; i <= m; i++)
 			if (!in[i]) {
-				t = -1;
+				t = -INF;
 				delta = min(delta, ed[i].v - lca(ed[i].x, ed[i].y));
 			}
 		if (!delta)

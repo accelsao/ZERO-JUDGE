@@ -1,3 +1,4 @@
+//還要刪掉多餘的東西 倍增lca部分
 #include<iostream>
 #include<cstring>
 #include<algorithm>

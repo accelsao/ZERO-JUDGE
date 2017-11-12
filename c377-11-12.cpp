@@ -105,49 +105,37 @@ int sg(int u, int p) {
 		if (v == p)continue;
 		int s = sg(v, u) + 1;
 		ans ^= s;
-		/*int v = g[u][i];
-		if (v == p)continue;
-		if (v == lw[u])continue;
-		int p = (lw[v] == lw[u]) ? mk[u] : 
-		int s = sg(v, u) + p;//壓縮點看mk 其他+1*/
 	}
-	return ans^mk[u];
+	return ans^mk[u];//mk[]=1代表 奇環 0為偶環
 }
-int main()
-{
-	int N, M, maxx = 0, k = 0;
-	while (scanf("%d %d", &N, &M) != EOF&&N + M)
-	{
-		ini(); int h = 0;
-		num = top = tot = 0, maxx = 0, k = 0;;
-		for (int i = 0; i<M; i++)
-		{
-			int a, b;
-			scanf("%d %d", &a, &b);
-			addedge(h, a, b); h++;
-			addedge(h, b, a); h++;
-			edgecnt[a][b]++, edgecnt[b][a]++;
+int main(){
+	int N, M, maxx = 0, k = 0,T;
+	while (cin >> T){
+		int ans = 0;
+		while (T--){
+			cin >> N >> M;			
+			ini(); int h = 0;
+			num = top = tot = 0, maxx = 0, k = 0;;
+			for (int i = 0; i < M; i++)
+			{
+				int a, b;
+				scanf("%d %d", &a, &b);
+				addedge(h, a, b); h++;
+				addedge(h, b, a); h++;
+				edgecnt[a][b]++, edgecnt[b][a]++;
+			}
+			for (int i = 1; i <= N; i++)
+				if (!dfn[i])
+					Tarjan(i);
+			mem(e, 0); h = 0; mem(vis, 0); mem(d, 0); mem(head, -1);
+			for (int i = 0; i < numb; i++){
+				addedge(h, dian[bb[i][0]], dian[bb[i][1]]); h++;
+				addedge(h, dian[bb[i][1]], dian[bb[i][0]]); h++;
+			}
+			dfs(dian[1], 0);
+			mem(vis, 0);
+			ans ^= sg(1, -1);
 		}
-		for (int i = 1; i <= N; i++)
-			if (!dfn[i])
-				Tarjan(i);
-		mem(e, 0); h = 0; mem(vis, 0); mem(d, 0); mem(head, -1);
-		for (int i = 0; i<numb; i++){
-			addedge(h, dian[bb[i][0]], dian[bb[i][1]]); h++;
-			addedge(h, dian[bb[i][1]], dian[bb[i][0]]); h++;
-		}
-		dfs(dian[1], 0);
-		mem(vis, 0);
-		int s = sg(1, -1);
-		printf("%d\n", s);
-		/*k = dian[1];
-		for (int i = 0; i<num; i++)
-		if (maxx<d[sd[i]]) { maxx = d[sd[i]]; k = sd[i]; }
-		mem(vis, 0); mem(d, 0);
-		dfs(k, 0); maxx = 0;
-		for (int i = 0; i<num; i++)
-		if (maxx<d[sd[i]]) maxx = d[sd[i]];
-		printf("%d\n", num - maxx - 1);*/
+		printf("%d\n", ans);
 	}
-	return 0;
 }

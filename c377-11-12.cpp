@@ -20,6 +20,9 @@ using namespace std;
 //#define N 1010
 #define scanf scanf_s
 
+
+
+
 #define ll long long
 #define mem(a,b) memset(a,b,sizeof(a))
 const int maxn = 20010;
@@ -60,6 +63,7 @@ void Tarjan(int u)
 			if (dfn[u]<low[t.to])
 			{
 				bb[numb][0] = u; bb[numb++][1] = t.to;
+
 			}
 		}
 		else { if (vis_st[t.to]) low[u] = min(low[u], low[t.to]); }
@@ -69,15 +73,18 @@ void Tarjan(int u)
 		sd[num++] = u;
 		int a;
 		int c = 0;
-		while (u != st[top]){
-			c+=edgecnt[u][st[top]];
-			vis_st[st[top]] = 0;
-			dian[st[top--]] = u;
-		}
-		vis_st[st[top]] = 0;
-		dian[st[top--]] = u;
+		int k = top;
+		do{
+			a = st[top];
+			vis_st[a] = 0;
+			dian[a] = u;
+			for (int i = top + 1; i <= k; i++)
+				c += edgecnt[a][st[i]];
+			top--;
+		} while (u != a);
 		if (c>2 && c & 1)
 			mk[u] = 1;
+		
 	}
 }
 void dfs(int u, int h)
@@ -101,7 +108,7 @@ int sg(int u, int p) {
 		/*int v = g[u][i];
 		if (v == p)continue;
 		if (v == lw[u])continue;
-		int p = (lw[v] == lw[u]) ? mk[u] : 1;
+		int p = (lw[v] == lw[u]) ? mk[u] : 
 		int s = sg(v, u) + p;//壓縮點看mk 其他+1*/
 	}
 	return ans^mk[u];

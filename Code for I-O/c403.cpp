@@ -1,8 +1,20 @@
-#include<vector>
-#include<cstdio>
+#include<iostream>
+#include<cmath>
 #include<algorithm>
-#include<fstream>
+#include<cstring>
+#include<cstdio>
+#include<queue>
+#include<string>
+#include<map>
+#include<set>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<functional>
+#include<unordered_map>
+#include<stack>
 #include<ctime>
+using namespace std;
 #define scanf scanf_s
 #define LL long long
 const int N = (1 << 20) + 5;
@@ -16,13 +28,12 @@ LL dis(int v, LL h) {
 	return s*h - p[v][s];
 }
 int main() {
-	FILE*f;
-	
-	/*freopen_s(&f, "c403_00.in.txt", "w", stdout);
-	int T=10;
+	/*FILE*s;
+	freopen_s(&s, "c306_03.in.txt", "w", stdout);
+	int T = 10;
 	printf("%d\n", T);
 	while (T--){
-		srand(time(NULL) + T);
+		//srand(time(NULL) + T);
 		n = rand() % 1000000 + 1;
 		m = rand() % 100000 + 1;
 		printf("%d %d\n", n, m);
@@ -31,9 +42,9 @@ int main() {
 		for (int i = 0; i < m; i++){
 			printf("%d %d\n", rand() % n + 1, rand() % 1000000001);
 		}
-	}
-	return 0;*/
-	freopen_s(&f, "c403_00.out.txt", "w", stdout);
+	}*/
+	cout << 3 << endl;
+	/*freopen_s(&s, "c403_00.out.txt", "w", stdout);
 	scanf("%d%d", &n, &m);
 	for (int i = 2; i <= n; i++)
 		scanf("%d", &w[i]);
@@ -57,6 +68,5 @@ int main() {
 			v /= 2;
 		}
 		printf("%lld\n", s);
-	}
-	return 0;
+	}*/
 }

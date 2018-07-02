@@ -1,5 +1,5 @@
 O(QN)
-
+```cpp
 #include <bits/stdc++.h>
 #define LL long long
 #define Accel ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
@@ -16,7 +16,7 @@ O(QN)
 #define SZ(a) ((int)a.size())
 //#pragma GCC optimize(2)
 using namespace std;
-const int N=1e6+1;
+const int N=1e6+10;
 const int M=1LL<<30;
 const int inf=1e9+7;
 const LL INF=1e18;
@@ -40,12 +40,15 @@ const double PI(acos(-1.0));
 //__builtin_popcount(mask)
 int n,q,l,r,d,op;
 LL a[N];
+int T;
 int main(){
-	
-	scanf("%d%d",&n,&q);
-	REP(i,q){
-		scanf("%d",&op);
-		if(!op){
+	//freopen("c653_00.out.txt","w",stdout);
+	scanf("%d",&T);
+	while(T--){
+		FOR(i,1,n)a[i]=0;
+		scanf("%d%d",&n,&q);
+		REP(i,q){
+			
 			scanf("%d%d%d",&l,&r,&d);
 			LL mn=a[l];
 			FOR(j,l+1,r) mn=min(mn,a[j]);
@@ -54,13 +57,12 @@ int main(){
 				a[j]+=mn;
 				a[j]%=M;
 			}
+		
 		}
-		else{
-			int odd=0;
-			FOR(j,1,n)
-				if(a[j]%2)odd++;
-			cout<<abs(n-odd-odd)<<endl;
-		}
-	
+		int odd=0;
+		FOR(j,1,n)
+			if(a[j]%2)odd++;
+		printf("%d\n",abs(n-odd-odd));
 	}
 }
+```

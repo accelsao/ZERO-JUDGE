@@ -29,58 +29,51 @@ int main(){
 
 	scanf("%d",&T);
 	while(T--){
-
+		mp.clear();
 		scanf("%d%d",&n,&q);
 		int ans=0;
-		int l,r,d,op;
-		REP(i,n){
-			scanf("%d",&op);
+		int l,r,d;
+		REP(i,q){
 			scanf("%d%d%d",&l,&r,&d);
+			if(d==0)continue;
 			
-			if(op==0){
-				if(d==0)continue;
-				
-				auto it=mp.lower_bound(l);
-				if(it==mp.end()){
-					mp[r]=l;
-					ans+=r-l+1;
-					cout<<ans<<endl;
-					continue;
+			auto it=mp.lower_bound(l);
+			if(it==mp.end()){
+				mp[r]=l;
+				ans+=r-l+1;
+				//cout<<ans<<endl;
+				continue;
+			}
+			while(it!=mp.end()){
+				int x=it->S,y=it->F;
+				if(r<x)break;
+				it=mp.erase(it);
+				ans-=y-x+1;
+				if(x<l){
+					mp[l-1]=x;
+					ans+=l-1-x+1;
 				}
-				while(it!=mp.end()){
-					int x=it->S,y=it->F;
-					if(r<x)break;
-					it=mp.erase(it);
-					ans-=y-x+1;
-					if(x<l){
-						mp[l-1]=x;
-						ans+=l-1-x+1;
-					}
-					else if(x>l){
-						mp[x-1]=l;
-						ans+=x-1-l+1;
-					}
-					if(y<r){
-						l=y+1;
-					}
-					else if(y>r){
-						l=r+1;r=y;
-					}
-					else{
-						//delete
-						l=r+1;
-					}
+				else if(x>l){
+					mp[x-1]=l;
+					ans+=x-1-l+1;
 				}
-				if(l<=r){
-					mp[r]=l;ans+=r-l+1;
+				if(y<r){
+					l=y+1;
+				}
+				else if(y>r){
+					l=r+1;r=y;
+				}
+				else{
+					//delete
+					l=r+1;
 				}
 			}
-			else{
-				cout<<ans<<endl;
+			if(l<=r){
+				mp[r]=l;ans+=r-l+1;
 			}
-			
 		}
+		printf("%d\n",abs(n-ans-ans));
 	}
 }
 
-```cpp
+```

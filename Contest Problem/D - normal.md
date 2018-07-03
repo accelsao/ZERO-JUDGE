@@ -41,33 +41,24 @@ int N,X,d,tim;
 
 int main(){Accel
 
-	//freopen("c654_01.out.txt","w",stdout);
-
+	//freopen("c654_02.out.txt","w",stdout);
 	cin>>T;
 	while(T--){
 		cin>>N>>X>>tim;
-		//assert(X>=1);
-		//assert(N<=X);
-		//set<int>s;
-		vector<int>b(N);
+		vector<LL>b(N);
 		REP(i,N){
 			cin>>b[i]>>d;
-			//s.insert(b[i]);
 			if(d)
 				b[i]-=tim;
 			else b[i]+=tim;
-			//if(b[i]<0)b[i]+=(-b[i]+X-1)/X;
+			if(b[i]<0)b[i]=(-b[i]+X-1)/X*X+b[i];
 			while(b[i]<0)b[i]+=X;
 			b[i]%=X;
 		}
-		//assert(SZ(s)==N);
-		
 		sort(ALL(b));
-		int mx=abs(b[0]-b[N-1]);
-		
-		
+		LL mx=b[0]+X-b[N-1];
 		for(int i=1;i<N;i++)
-			mx=max(mx,abs(b[i]-b[i-1]));
+			mx=max(mx,b[i]-b[i-1]);
 		cout<<mx<<endl;
 	}
 }

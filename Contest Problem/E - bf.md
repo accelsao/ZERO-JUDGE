@@ -37,36 +37,55 @@ const double PI(acos(-1.0));
 //int dw[8][2]={{0,1},{1,0},{0,-1},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
 //cout<<fixed<<setprecision(12)<<ans<<endl;
 //__builtin_popcount(mask)
+int T;
 int n;
 int a[N];
+int b[N];
 int main(){Accel
-	cin>>n;
-	int mx=0;
-	FOR(i,1,n){
-		cin>>a[i];
-		if(a[i]>mx){
-			mx=a[i];
+
+//	freopen("c655_01.out.txt","w",stdout);
+	cin>>T;
+	while(T--){
+		cin>>n;
+		int p;
+		FOR(i,1,n){
+			cin>>a[i];
+			if(a[i]==n)p=i;
 		}
-	}
-	int ans=0;
-	FOR(k,1,n)
-		if(a[i]==mx){
-			int t=0;
-			vector<int>b;
+		int ans=n*n;
+		FOR(k,1,n){
+			FOR(i,1,n)b[i]=a[i];
+			if(p>k){
+				for(int i=p-1;i>=k;i--)
+					swap(b[i+1],b[i]);
+			}
+			else{
+				for(int i=p+1;i<=k;i++)
+					swap(b[i],b[i-1]);
+			}
+			int t=abs(p-k);
+			
+			//FOR(i,1,n)
+			//	cout<<b[i]<<" ";cout<<endl;
+			
+			vector<int>v;
 			for(int i=k-1;i>=1;i--){
-				for(auto x:b)
-					if(a[i]>x)t++;
-				b.PB(a[i]);
+				for(auto x:v)
+					if(b[i]>x)t++;
+				v.PB(b[i]);
 			}
-			b.clear();
+			v.clear();
 			for(int i=k+1;i<=n;i++){
-				for(auto x:b)
-					if(a[i]>x)t++;
-				b.PB(a[i]);
+				for(auto x:v)
+					if(b[i]>x)t++;
+				v.PB(b[i]);
 			}
-			ans=max(ans,t);
-		
+			//cout<<t<<endl;
+			ans=min(ans,t);
+			
+			
 		}
-	cout<<ans<<endl;
+		cout<<ans<<endl;
+	}
 }
 ```
